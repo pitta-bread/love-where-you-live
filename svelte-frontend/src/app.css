@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@600;700&display=swap');
+@import 'tailwindcss';
+
+:root {
+	--color-background: #f5f2ea;
+	--color-surface: #ffffff;
+	--color-primary: #2f3e46;
+	--color-muted: #5a6972;
+	--color-accent: #c18a63;
+	--color-border: #e5e0d6;
+	--color-success: #6c8b63;
+	--font-display: 'Playfair Display', Georgia, serif;
+	--font-body: 'Lato', 'Trebuchet MS', sans-serif;
+}
+
+@theme inline {
+	--color-background: var(--color-background);
+	--color-surface: var(--color-surface);
+	--color-primary: var(--color-primary);
+	--color-muted: var(--color-muted);
+	--color-accent: var(--color-accent);
+	--color-border: var(--color-border);
+	--color-success: var(--color-success);
+}
+
+@layer base {
+	body {
+		font-family: var(--font-body);
+		@apply bg-background text-primary antialiased;
+	}
+
+	h1,
+	h2,
+	h3 {
+		font-family: var(--font-display);
+	}
+}
+
+.paper-texture {
+	background-image:
+		linear-gradient(to right, rgb(255 255 255 / 0.45), rgb(255 255 255 / 0.45)),
+		radial-gradient(circle at 1px 1px, rgb(47 62 70 / 0.06) 1px, transparent 0);
+	background-size: auto, 16px 16px;
+}
