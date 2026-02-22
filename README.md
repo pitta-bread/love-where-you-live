@@ -6,7 +6,7 @@ House searching online. What if, you could put in all the places you regularly g
 
 https://excalidraw.com/#json=6goSZ0LxCfiajLjZzWG0z,XSoldNg6rcnPcWaRvl8_JQ
 
-## Backend quick start (FastAPI + SQLModel + Postgres)
+## Backend quick start (FastAPI + SQLModel + Postgres via pgserver)
 
 1. Install dependencies:
 
@@ -14,23 +14,13 @@ https://excalidraw.com/#json=6goSZ0LxCfiajLjZzWG0z,XSoldNg6rcnPcWaRvl8_JQ
    uv sync --dev
    ```
 
-2. Copy backend environment values:
+2. Start a local Postgres instance (pgserver), run migrations, and launch the API:
 
    ```bash
-   cp backend/.env.example .env
+   uv run python -m backend.scripts.dev_pgserver
    ```
 
-3. Apply migrations:
-
-   ```bash
-   uv run alembic upgrade head
-   ```
-
-4. Run the API:
-
-   ```bash
-   uv run uvicorn backend.app.main:app --reload
-   ```
+   This command starts Postgres at `.pgserver/data`, ensures the `love_where_you_live` database exists, applies Alembic migrations, and runs Uvicorn with the generated `DATABASE_URL`.
 
 ## Quality checks
 
@@ -43,5 +33,5 @@ https://excalidraw.com/#json=6goSZ0LxCfiajLjZzWG0z,XSoldNg6rcnPcWaRvl8_JQ
 - Tests:
 
   ```bash
-  uv pytest
+  uv run pytest
   ```
