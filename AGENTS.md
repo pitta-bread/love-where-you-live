@@ -33,6 +33,46 @@ Ruff is configured in `pyproject.toml`.
 uv pytest
 ```
 
+### Frontend (Svelte/TS) Workflow
+
+Run these from `svelte-frontend/`:
+
+```bash
+npm ci
+npm run dev
+npm run check
+npm run lint
+npm run format
+npm run test
+npm run build
+```
+
+Pre-commit frontend quality gate:
+
+```bash
+npm run check && npm run lint && npm run test && npm run build
+```
+
+Svelte/TypeScript best-practice defaults:
+
+- Keep TypeScript `strict` enabled.
+- Avoid `any` unless there is a documented exception.
+- Keep shared frontend domain types under `src/lib/types`.
+- Keep route files thin and move reusable UI into `src/lib/components`.
+- Prefer presentational components in early phases; avoid hidden fetch side effects.
+- Keep accessibility basics in place (`alt`, semantic headings, keyboard-safe controls once interactivity exists).
+- Keep styling tokens centralized in `src/app.css` and avoid ad-hoc inline style drift.
+
+Validation workflow note:
+
+- Run Python lint/tests when backend code changes.
+- Run frontend checks when files under `svelte-frontend/` change.
+
+### Repo Notes (Minimal)
+
+- Root `.gitignore` came from a Python template and ignores `lib/`; keep the explicit unignore for `svelte-frontend/src/lib/**`.
+- Vercel aliases can be set (for example `love-where-you-live.vercel.app`), but project protection may still require auth until disabled in Vercel settings.
+
 ## Tech Stack
 
 - Svelte

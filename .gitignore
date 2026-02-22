@@ -16,6 +16,8 @@ eggs/
 .eggs/
 lib/
 lib64/
+!svelte-frontend/src/lib/
+!svelte-frontend/src/lib/**
 parts/
 sdist/
 var/
