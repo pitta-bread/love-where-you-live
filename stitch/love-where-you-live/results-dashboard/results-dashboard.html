@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Love Where You Live - Results Dashboard</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&amp;family=Lato:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2F3E46", // Slate Charcoal
+                        "background": "#F5F2EA", // Bone/Cream
+                        "surface": "#FFFFFF",
+                        "surface-muted": "#EAE4D6",
+                        "accent": "#C18A63", // Terracotta
+                        "success": "#7E9C76", // Sage Green
+                        "warning": "#D4A373", // Muted Gold
+                        "error": "#BC6C25", // Burnt Orange
+                        "border-main": "#E5E0D6",
+                    },
+                    fontFamily: {
+                        "display": ["'Playfair Display'", "serif"],
+                        "sans": ["'Lato'", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "2px",
+                        "sm": "2px",
+                        "md": "4px",
+                    },
+                    boxShadow: {
+                        'soft': '0 20px 25px -5px rgb(47 62 70 / 0.1)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #D4D4D8;
+            border-radius: 20px;
+        }
+        .match-ring {
+            transition: stroke-dashoffset 1s ease-in-out;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .card-hover-effect {
+            transition: all 0.3s ease;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgb(47 62 70 / 0.1);
+        }
+        .bg-texture {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .font-display-italic {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body class="bg-background text-primary font-sans antialiased relative min-h-screen flex flex-col overflow-x-hidden selection:bg-accent selection:text-white">
+<div class="bg-texture"></div>
+<header class="sticky top-0 z-50 w-full bg-background/90 backdrop-blur-md border-b border-border-main px-6 py-4">
+<div class="max-w-[1400px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[32px]">other_houses</span>
+</div>
+<h1 class="font-display text-2xl font-semibold tracking-tight text-primary">Love Where You Live</h1>
+</div>
+<div class="hidden md:flex items-center gap-3 px-4 py-1.5 rounded-full bg-surface/50 border border-border-main">
+<div class="flex items-center gap-2 text-sm text-primary/80">
+<span class="material-symbols-outlined text-[16px] text-accent">work</span>
+<span class="font-medium">Work (Daily)</span>
+</div>
+<span class="text-border-main">•</span>
+<div class="flex items-center gap-2 text-sm text-primary/80">
+<span class="material-symbols-outlined text-[16px] text-accent">fitness_center</span>
+<span class="font-medium">Gym (3x/week)</span>
+</div>
+<span class="text-border-main">•</span>
+<div class="flex items-center gap-2 text-sm text-primary/80">
+<span class="material-symbols-outlined text-[16px] text-accent">school</span>
+<span class="font-medium">School (Daily)</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden sm:flex gap-6 text-sm font-bold tracking-wide uppercase">
+<a class="text-primary hover:text-accent transition-colors border-b-2 border-primary pb-0.5" href="#">Dashboard</a>
+<a class="text-primary/60 hover:text-accent transition-colors" href="#">Compare</a>
+</nav>
+<div class="h-6 w-px bg-border-main hidden sm:block"></div>
+<button class="flex items-center justify-center size-9 rounded-full bg-surface border border-border-main text-primary hover:bg-surface-muted transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="flex items-center justify-center size-9 rounded-full bg-surface border border-border-main text-primary hover:bg-surface-muted transition-colors">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 w-full max-w-[1400px] mx-auto px-6 py-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
+<div class="lg:col-span-8 flex flex-col gap-6">
+<div class="flex flex-wrap items-center justify-between gap-4 pb-2">
+<h2 class="font-display text-3xl font-semibold text-primary">Top Lifestyle Matches</h2>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<button class="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-primary hover:text-accent transition-colors">
+<span>Sort by: Lifestyle Match</span>
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<article class="card-hover-effect bg-surface border border-border-main rounded p-0 flex flex-col sm:flex-row overflow-hidden relative group cursor-pointer">
+<button class="absolute top-4 left-4 z-20 size-8 flex items-center justify-center rounded-full bg-surface/90 backdrop-blur-sm border border-border-main text-primary hover:bg-surface transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<div class="absolute top-4 right-4 z-20 flex flex-col items-center justify-center bg-surface/90 backdrop-blur-sm rounded-full p-2 shadow-sm border border-border-main">
+<div class="relative size-14">
+<svg class="size-full" viewBox="0 0 36 36">
+<path class="text-surface-muted" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2.5"></path>
+<path class="text-accent match-ring" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="92, 100" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center flex-col">
+<span class="text-xs font-bold text-primary">92%</span>
+</div>
+</div>
+</div>
+<div class="w-full sm:w-[35%] h-56 sm:h-auto relative overflow-hidden bg-gray-100">
+<img alt="Modern interior" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD02gFmNYOx3LEvYkKZwrmeY7w2O6WPEBNsNZ0iNB_rOHWMz7qlPRI2faohZ2M1U6OIbQuPK-Ed1_NOY4YlyNxJTZwExTs4HqfbrHXGw_dwSQNjEv4sLo-qunjdCFFiMXdLf5c_w3RiKci4T4OpVYwEoeXCTjPQfsyl4Nd1ctjRtmD9Pj9GFVxTIq-N-BNpdHydCwAdTMuNpDP3LXtkGuRnmR0YAUhy-Q5nIaNRif4T276G67gDiZZoggCKeM1SnHDdMHQ8D806Ts4"/>
+<div class="absolute bottom-3 left-3 bg-primary/80 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
+                        New Listing
+                    </div>
+</div>
+<div class="flex-1 p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start pr-16">
+<div>
+<h3 class="font-display text-2xl text-primary font-semibold leading-tight mb-1">124 Maple Street</h3>
+<p class="text-primary/60 text-sm">North Highland, Seattle • $845,000</p>
+</div>
+</div>
+<div class="flex gap-4 mt-4 mb-6">
+<div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary/70">
+<span class="material-symbols-outlined text-[16px]">bed</span> 3 BEDS
+                            </div>
+<div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary/70">
+<span class="material-symbols-outlined text-[16px]">shower</span> 2 BATHS
+                            </div>
+<div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary/70">
+<span class="material-symbols-outlined text-[16px]">square_foot</span> 1,850 SQFT
+                            </div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 border-t border-border-main pt-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 text-primary/50 text-[11px] uppercase font-bold tracking-wide">
+<span class="material-symbols-outlined text-[14px]">directions_car</span> To Work
+                            </div>
+<span class="text-success font-bold text-sm">18 min</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 text-primary/50 text-[11px] uppercase font-bold tracking-wide">
+<span class="material-symbols-outlined text-[14px]">directions_walk</span> To Gym
+                            </div>
+<span class="text-success font-bold text-sm">8 min</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 text-primary/50 text-[11px] uppercase font-bold tracking-wide">
+<span class="material-symbols-outlined text-[14px]">directions_bus</span> To School
+                            </div>
+<span class="text-warning font-bold text-sm">22 min</span>
+</div>
+</div>
+</div>
+</article>
+<article class="card-hover-effect bg-surface border border-border-main rounded p-0 flex flex-col sm:flex-row overflow-hidden relative group cursor-pointer">
+<button class="absolute top-4 left-4 z-20 size-8 flex items-center justify-center rounded-full bg-surface/90 backdrop-blur-sm border border-border-main text-primary hover:bg-surface transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<div class="absolute top-4 right-4 z-20 flex flex-col items-center justify-center bg-surface/90 backdrop-blur-sm rounded-full p-2 shadow-sm border border-border-main">
+<div class="relative size-14">
+<svg class="size-full" viewBox="0 0 36 36">
+<path class="text-surface-muted" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2.5"></path>
+<path class="text-accent match-ring" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="84, 100" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center flex-col">
+<span class="text-xs font-bold text-primary">84%</span>
+</div>
+</div>
+</div>
+<div class="w-full sm:w-[35%] h-56 sm:h-auto relative overflow-hidden bg-gray-100">
+<img alt="Modern kitchen" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAhB6apOkhBcWcOgbRamAfwerTXiulo2ZwsXj0vq2N1vSu-J80470pbVQPgra-ucrcpRfs97HlZbub9MzIutcntIPwgWdvzdzbz8PZBFqhAyBaTRVOI8JfWjSEj0GH6haH1d91Eiie0DpvQRv7ciNIXofRqeg4vKxGcVeSKi_KhgeqfffOWCEGBBcUe7TCGZchXn7SveLIBeLJROgKSIeP14nvRlcibR_yEbpMnUoXsN188eXAhbgxL7cgqrR8E94n5NuAv6vmCfc"/>
+</div>
+<div class="flex-1 p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start pr-16">
+<div>
+<h3 class="font-display text-2xl text-primary font-semibold leading-tight mb-1">880 Highland Ave</h3>
+<p class="text-primary/60 text-sm">Queen Anne, Seattle • $910,000</p>
+</div>
+</div>
+<div class="flex gap-4 mt-4 mb-6">
+<div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary/70">
+<span class="material-symbols-outlined text-[16px]">bed</span> 4 BEDS
+                            </div>
+<div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary/70">
+<span class="material-symbols-outlined text-[16px]">shower</span> 3 BATHS
+                            </div>
+<div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary/70">
+<span class="material-symbols-outlined text-[16px]">square_foot</span> 2,100 SQFT
+                            </div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 border-t border-border-main pt-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 text-primary/50 text-[11px] uppercase font-bold tracking-wide">
+<span class="material-symbols-outlined text-[14px]">directions_car</span> To Work
+                            </div>
+<span class="text-warning font-bold text-sm">25 min</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 text-primary/50 text-[11px] uppercase font-bold tracking-wide">
+<span class="material-symbols-outlined text-[14px]">directions_walk</span> To Gym
+                            </div>
+<span class="text-success font-bold text-sm">12 min</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 text-primary/50 text-[11px] uppercase font-bold tracking-wide">
+<span class="material-symbols-outlined text-[14px]">directions_bus</span> To School
+                            </div>
+<span class="text-success font-bold text-sm">15 min</span>
+</div>
+</div>
+</div>
+</article>
+<article class="card-hover-effect bg-surface border border-border-main rounded p-0 flex flex-col sm:flex-row overflow-hidden relative group cursor-pointer opacity-90 hover:opacity-100">
+<button class="absolute top-4 left-4 z-20 size-8 flex items-center justify-center rounded-full bg-surface/90 backdrop-blur-sm border border-border-main text-primary hover:bg-surface transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<div class="absolute top-4 right-4 z-20 flex flex-col items-center justify-center bg-surface/90 backdrop-blur-sm rounded-full p-2 shadow-sm border border-border-main">
+<div class="relative size-14">
+<svg class="size-full" viewBox="0 0 36 36">
+<path class="text-surface-muted" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2.5"></path>
+<path class="text-accent match-ring" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="78, 100" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center flex-col">
+<span class="text-xs font-bold text-primary">78%</span>
+</div>
+</div>
+</div>
+<div class="w-full sm:w-[35%] h-56 sm:h-auto relative overflow-hidden bg-gray-100">
+<img alt="Modern exterior" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCK15fzEilkD3R-FlDBBwc9-MohLmEmVAnIr8qunTl17Olm3Ks9oFjC87Vk-abBtkZkDufmPmrW3EKm6BvdtDDjbNACtN_RYl6JchGFuwGHfFpemFz3mv3VL9dKg57LYv6A0NeVqlr3mpaJN_MbbDzTdlRc3lQQ1QZ2gI20zdWCCXiD8L8eetAmGYBGuh11zZI4DES5gl8Vr9D3hHLjQBHryZ6lV_2coGh3u8AEalrznC5q1NtMrHb6fsMkJiFaEqf-ImXBtJhy5EM"/>
+</div>
+<div class="flex-1 p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start pr-16">
+<div>
+<h3 class="font-display text-2xl text-primary font-semibold leading-tight mb-1">42 West Oak</h3>
+<p class="text-primary/60 text-sm">Fremont, Seattle • $799,000</p>
+</div>
+</div>
+<div class="flex gap-4 mt-4 mb-6">
+<div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary/70">
+<span class="material-symbols-outlined text-[16px]">bed</span> 2 BEDS
+                            </div>
+<div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary/70">
+<span class="material-symbols-outlined text-[16px]">shower</span> 1.5 BATHS
+                            </div>
+<div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary/70">
+<span class="material-symbols-outlined text-[16px]">square_foot</span> 1,200 SQFT
+                            </div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 border-t border-border-main pt-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 text-primary/50 text-[11px] uppercase font-bold tracking-wide">
+<span class="material-symbols-outlined text-[14px]">directions_car</span> To Work
+                            </div>
+<span class="text-warning font-bold text-sm">28 min</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 text-primary/50 text-[11px] uppercase font-bold tracking-wide">
+<span class="material-symbols-outlined text-[14px]">directions_bike</span> To Gym
+                            </div>
+<span class="text-warning font-bold text-sm">20 min</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1.5 text-primary/50 text-[11px] uppercase font-bold tracking-wide">
+<span class="material-symbols-outlined text-[14px]">directions_bus</span> To School
+                            </div>
+<span class="text-error font-bold text-sm">45 min</span>
+</div>
+</div>
+</div>
+</article>
+<article class="bg-surface border border-border-main rounded p-0 flex flex-col sm:flex-row overflow-hidden opacity-70">
+<div class="w-full sm:w-[35%] h-56 sm:h-auto bg-surface-muted animate-pulse"></div>
+<div class="flex-1 p-6 flex flex-col justify-between">
+<div>
+<div class="h-8 bg-surface-muted rounded w-3/4 mb-2 animate-pulse"></div>
+<div class="h-4 bg-surface-muted rounded w-1/2 mb-6 animate-pulse"></div>
+<div class="flex gap-4">
+<div class="h-4 bg-surface-muted rounded w-16 animate-pulse"></div>
+<div class="h-4 bg-surface-muted rounded w-16 animate-pulse"></div>
+<div class="h-4 bg-surface-muted rounded w-16 animate-pulse"></div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-4 border-t border-border-main pt-4 mt-6">
+<div class="h-8 bg-surface-muted rounded w-full animate-pulse"></div>
+<div class="h-8 bg-surface-muted rounded w-full animate-pulse"></div>
+<div class="h-8 bg-surface-muted rounded w-full animate-pulse"></div>
+</div>
+</div>
+</article>
+</div>
+<aside class="hidden lg:block lg:col-span-4 pl-6 relative">
+<div class="sticky top-28 flex flex-col gap-8">
+<div class="bg-surface border border-border-main rounded p-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-display text-lg font-semibold text-primary">Your Anchors</h3>
+<button class="text-accent hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+</div>
+<p class="text-sm text-primary/60 mb-6 leading-relaxed">
+                        These are the fixed points in your life. We measure every home against them.
+                    </p>
+<div class="flex flex-col gap-3">
+<div class="flex items-start gap-3 p-3 rounded hover:bg-background transition-colors cursor-default group">
+<div class="mt-0.5 text-primary group-hover:text-accent transition-colors">
+<span class="material-symbols-outlined text-[20px]">work</span>
+</div>
+<div>
+<h4 class="font-bold text-sm text-primary">Downtown Office</h4>
+<p class="text-xs text-primary/60 mt-0.5">Daily Commute • 9:00 AM</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3 rounded hover:bg-background transition-colors cursor-default group">
+<div class="mt-0.5 text-primary group-hover:text-accent transition-colors">
+<span class="material-symbols-outlined text-[20px]">fitness_center</span>
+</div>
+<div>
+<h4 class="font-bold text-sm text-primary">Equinox Gym</h4>
+<p class="text-xs text-primary/60 mt-0.5">3x / Week • Evening</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3 rounded hover:bg-background transition-colors cursor-default group">
+<div class="mt-0.5 text-primary group-hover:text-accent transition-colors">
+<span class="material-symbols-outlined text-[20px]">school</span>
+</div>
+<div>
+<h4 class="font-bold text-sm text-primary">Montessori School</h4>
+<p class="text-xs text-primary/60 mt-0.5">Daily Drop-off • 8:00 AM</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-3 px-4 border border-dashed border-primary/30 rounded text-sm font-bold uppercase tracking-wider text-primary hover:bg-background hover:border-primary transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add_location</span>
+                        ADD ANCHOR
+                    </button>
+</div>
+<div class="p-8 bg-primary text-white rounded flex flex-col gap-4 text-center">
+<div class="size-12 rounded-full bg-white/10 mx-auto flex items-center justify-center">
+<span class="material-symbols-outlined text-white">home_app_logo</span>
+</div>
+<div>
+<h3 class="font-display text-2xl font-semibold mb-2">Found a listing?</h3>
+<p class="text-white/70 text-sm leading-relaxed mb-4">Paste a Zillow or Redfin link to see how it fits your rhythm.</p>
+</div>
+<button class="w-full py-4 bg-white text-primary rounded text-sm font-bold uppercase tracking-wider hover:bg-accent hover:text-white transition-colors">
+                        ADD PROPERTY
+                    </button>
+</div>
+</div>
+</aside>
+</main>
+
+</body></html>
