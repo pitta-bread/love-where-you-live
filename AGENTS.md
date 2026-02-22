@@ -41,3 +41,4 @@ uv pytest
 - Vercel for free cloud hosting of the web app, both FE and BE (hobby tier)
 - Google Maps Platform API for mapping and location and transit times
 - Github, Codex, VS Code for coding and repo hosting
+- Github Actions for CI/CD, if needed depending on Vercel
