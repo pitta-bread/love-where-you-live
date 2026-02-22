@@ -68,6 +68,11 @@ Validation workflow note:
 - Run Python lint/tests when backend code changes.
 - Run frontend checks when files under `svelte-frontend/` change.
 
+### Repo Notes (Minimal)
+
+- Root `.gitignore` came from a Python template and ignores `lib/`; keep the explicit unignore for `svelte-frontend/src/lib/**`.
+- Vercel aliases can be set (for example `love-where-you-live.vercel.app`), but project protection may still require auth until disabled in Vercel settings.
+
 ## Tech Stack
 
 - Svelte
