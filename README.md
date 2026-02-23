@@ -6,7 +6,7 @@ House searching online. What if, you could put in all the places you regularly g
 
 https://excalidraw.com/#json=6goSZ0LxCfiajLjZzWG0z,XSoldNg6rcnPcWaRvl8_JQ
 
-## Backend quick start (FastAPI + SQLModel + Postgres via pgserver)
+## Backend quick start (local SQLite)
 
 1. Install dependencies:
 
@@ -14,13 +14,35 @@ https://excalidraw.com/#json=6goSZ0LxCfiajLjZzWG0z,XSoldNg6rcnPcWaRvl8_JQ
    uv sync --dev
    ```
 
-2. Start a local Postgres instance (pgserver), run migrations, and launch the API:
+2. Copy environment values:
 
    ```bash
-   uv run python -m backend.scripts.dev_pgserver
+   cp backend/.env.example .env
    ```
 
-   This command starts Postgres at `.pgserver/data`, ensures the `love_where_you_live` database exists, applies Alembic migrations, and runs Uvicorn with the generated `DATABASE_URL`.
+3. Run the API:
+
+   ```bash
+   uv run uvicorn backend.app.main:app --reload
+   ```
+
+The app creates tables automatically on startup for local development.
+
+## Vercel production setup (Neon Postgres)
+
+1. In Neon, create a Postgres project/database and copy the connection string.
+2. In Vercel project settings, add environment variable `DATABASE_URL` for Production.
+3. Use SQLAlchemy/psycopg format, for example:
+
+   ```text
+   postgresql+psycopg://USER:PASSWORD@HOST/DBNAME?sslmode=require
+   ```
+
+4. Run migrations against production DB before/with deploy:
+
+   ```bash
+   DATABASE_URL='postgresql+psycopg://USER:PASSWORD@HOST/DBNAME?sslmode=require' uv run alembic upgrade head
+   ```
 
 ## Quality checks
 
