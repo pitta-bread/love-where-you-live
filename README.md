@@ -38,7 +38,7 @@ The app creates tables automatically on startup for local development.
 1. Create a dedicated Vercel project for the backend in this same repo.
 2. Set **Root Directory** to `backend`.
 3. Do not add a `vercel.json` for backend routing unless custom behavior is needed; Vercel can detect FastAPI with zero config when the root contains a valid entrypoint.
-4. The backend entrypoint is `app.py` (repo path `backend/app.py`) and exports a FastAPI `app`.
+4. The backend entrypoint is `app/index.py` (repo path `backend/app/index.py`) and exports a FastAPI `app`.
 
 5. In Backend Project Settings → Build & Development Settings, override Install Command to:
 
