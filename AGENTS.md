@@ -21,16 +21,20 @@ Find more context in at the [docs](./docs/project-context.md).
 
 ### Linting
 
+Run from `backend/`:
+
 ```bash
 uvx ruff check --fix
 ```
 
-Ruff is configured in `pyproject.toml`.
+Ruff is configured in `backend/pyproject.toml`.
 
 ### Running Unit Tests
 
+Run from `backend/`:
+
 ```bash
-uv pytest
+uv run pytest
 ```
 
 ### Frontend (Svelte/TS) Workflow
