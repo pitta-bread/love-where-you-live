@@ -2,8 +2,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from backend.app.api.routes import anchors_router, system_router
-from backend.app.db.init_db import init_db
+from .api.routes import anchors_router, system_router
+from .db.init_db import init_db
 
 
 @asynccontextmanager

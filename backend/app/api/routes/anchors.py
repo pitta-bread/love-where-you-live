@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, status
 from sqlmodel import Session, select
 
-from backend.app.db.session import get_session
-from backend.app.models.anchor import Anchor, AnchorCreate, AnchorRead
+from ...db.session import get_session
+from ...models.anchor import Anchor, AnchorCreate, AnchorRead
 
 router = APIRouter(prefix="/anchors", tags=["anchors"])
 
