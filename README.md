@@ -28,11 +28,34 @@ https://excalidraw.com/#json=6goSZ0LxCfiajLjZzWG0z,XSoldNg6rcnPcWaRvl8_JQ
 
 The app creates tables automatically on startup for local development.
 
-## Vercel production setup (Neon Postgres)
+## Vercel monorepo setup (separate frontend + backend projects)
+
+### Backend project
+
+1. Create a dedicated Vercel project for the backend in this same repo.
+2. Set **Root Directory** to `backend`.
+3. Do not add a `vercel.json` for backend routing unless custom behavior is needed; Vercel can detect FastAPI with zero config when the root contains a valid entrypoint.
+4. The backend entrypoint is `backend/app.py` and exports a FastAPI `app`.
+
+5. In Backend Project Settings → Build & Development Settings, override Install Command to:
+
+   ```bash
+   uv sync --locked
+   ```
+
+   This uses `pyproject.toml` + `uv.lock` directly (no `requirements.txt` needed).
+
+### Frontend project
+
+1. Create or keep a separate Vercel project for the Svelte app.
+2. Set **Root Directory** to `svelte-frontend`.
+3. Keep "Skip deployments when there are no changes to the root directory" enabled for both projects.
+
+### Database and env vars
 
 1. In Neon, create a Postgres project/database and copy the connection string.
-2. In Vercel project settings, add environment variable `DATABASE_URL` for Production.
-3. Use SQLAlchemy/psycopg format, for example:
+2. In the backend Vercel project settings, add `DATABASE_URL` for Production and Preview.
+3. Use SQLAlchemy/psycopg format:
 
    ```text
    postgresql+psycopg://USER:PASSWORD@HOST/DBNAME?sslmode=require
@@ -43,6 +66,10 @@ The app creates tables automatically on startup for local development.
    ```bash
    DATABASE_URL='postgresql+psycopg://USER:PASSWORD@HOST/DBNAME?sslmode=require' uv run alembic upgrade head
    ```
+
+### Related Projects (recommended)
+
+For monorepo preview environments, link the frontend project to the backend project using Vercel Related Projects so preview frontend deployments can automatically reference matching backend preview hosts.
 
 ## Quality checks
 
