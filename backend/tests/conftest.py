@@ -7,10 +7,10 @@ from fastapi.testclient import TestClient
 from sqlalchemy.pool import StaticPool
 from sqlmodel import Session, SQLModel, create_engine
 
-sys.path.append(str(Path(__file__).resolve().parents[2]))
+sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from backend.app.db.session import get_session
-from backend.app.main import app
+from app.db.session import get_session
+from app.main import app
 
 
 @pytest.fixture()
