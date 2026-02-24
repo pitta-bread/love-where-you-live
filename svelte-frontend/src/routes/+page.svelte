@@ -1,5 +1,9 @@
 <script lang="ts">
-	import type { AnchorSummary, PropertyCardSummary } from '$lib/types/domain';
+	import AnchorManager from '$lib/components/AnchorManager.svelte';
+	import type { PropertyCardSummary } from '$lib/types/domain';
+	import type { ActionData, PageData } from './$types';
+
+	let { data, form }: { data: PageData; form: ActionData | null } = $props();
 
 	const featuredProperty: PropertyCardSummary = {
 		title: '124 Maple Close',
@@ -11,23 +15,11 @@
 		schoolMins: 17
 	};
 
-	const anchors: AnchorSummary[] = [
-		{ name: 'Temple Quay Office', mode: 'transit', cadenceLabel: '5x per week' },
-		{ name: 'Clifton Gym', mode: 'walk', cadenceLabel: '3x per week' },
-		{ name: 'Little Oaks Nursery', mode: 'drive', cadenceLabel: '5x per week' }
-	];
-
 	const money = new Intl.NumberFormat('en-GB', {
 		style: 'currency',
 		currency: 'GBP',
 		maximumFractionDigits: 0
 	});
-
-	const modeLabel: Record<AnchorSummary['mode'], string> = {
-		drive: 'Drive',
-		transit: 'Transit',
-		walk: 'Walk'
-	};
 </script>
 
 <svelte:head>
@@ -85,20 +77,7 @@
 		</section>
 
 		<aside class="space-y-4">
-			<section class="rounded-md border border-border bg-surface p-5">
-				<h3 class="text-lg font-semibold text-primary">Your anchors</h3>
-				<p class="mt-2 text-sm text-muted">Static placeholders for the weekly places that matter most.</p>
-				<ul class="mt-4 space-y-3">
-					{#each anchors as anchor}
-						<li class="rounded border border-border bg-background px-3 py-2">
-							<p class="font-bold text-primary">{anchor.name}</p>
-							<p class="text-xs uppercase tracking-wide text-muted">
-								{modeLabel[anchor.mode]} • {anchor.cadenceLabel}
-							</p>
-						</li>
-					{/each}
-				</ul>
-			</section>
+			<AnchorManager anchors={data.anchors} form={form ?? undefined} />
 
 			<section class="rounded-md border border-primary bg-primary p-5 text-white">
 				<h3 class="text-xl font-semibold">Found a listing?</h3>
