@@ -6,6 +6,14 @@ function apiUrl(apiBaseUrl: string, path: string): string {
 	return `${apiBaseUrl.replace(/\/$/, '')}${path}`;
 }
 
+function requestHeaders(sharedSecret?: string): HeadersInit {
+	if (!sharedSecret) {
+		return {};
+	}
+
+	return { 'x-backend-secret': sharedSecret };
+}
+
 export class AnchorApiError extends Error {
 	status: number;
 	responseBody: string;
@@ -26,8 +34,14 @@ async function responseBody(response: Response): Promise<string> {
 	}
 }
 
-export async function listAnchors(fetchFn: ApiFetch, apiBaseUrl: string): Promise<AnchorRead[]> {
-	const response = await fetchFn(apiUrl(apiBaseUrl, '/api/v1/anchors'));
+export async function listAnchors(
+	fetchFn: ApiFetch,
+	apiBaseUrl: string,
+	sharedSecret?: string
+): Promise<AnchorRead[]> {
+	const response = await fetchFn(apiUrl(apiBaseUrl, '/api/v1/anchors'), {
+		headers: requestHeaders(sharedSecret)
+	});
 
 	if (!response.ok) {
 		throw new AnchorApiError('Failed to list anchors', response.status, await responseBody(response));
@@ -39,11 +53,15 @@ export async function listAnchors(fetchFn: ApiFetch, apiBaseUrl: string): Promis
 export async function createAnchor(
 	fetchFn: ApiFetch,
 	apiBaseUrl: string,
-	payload: AnchorCreateInput
+	payload: AnchorCreateInput,
+	sharedSecret?: string
 ): Promise<AnchorRead> {
 	const response = await fetchFn(apiUrl(apiBaseUrl, '/api/v1/anchors'), {
 		method: 'POST',
-		headers: { 'content-type': 'application/json' },
+		headers: {
+			'content-type': 'application/json',
+			...requestHeaders(sharedSecret)
+		},
 		body: JSON.stringify(payload)
 	});
 

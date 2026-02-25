@@ -71,6 +71,17 @@ The app creates tables automatically on startup for local development.
    DATABASE_URL='postgresql+psycopg://USER:PASSWORD@HOST/DBNAME?sslmode=require' uv run alembic upgrade head
    ```
 
+5. Add backend request protection + strict CORS env vars in Vercel (Preview + Production):
+
+   - Backend project:
+     - `API_SHARED_SECRET` (random long value)
+     - `CORS_ALLOWED_ORIGINS` (comma-separated frontend origins)
+   - Frontend project:
+     - `BACKEND_API_SHARED_SECRET` (must match backend secret)
+
+6. Keep all future public backend endpoints under `/api/v1` so they inherit shared-secret protection.
+
+
 ### Related Projects (recommended)
 
 For monorepo preview environments, link the frontend project to the backend project using Vercel Related Projects so preview frontend deployments can automatically reference matching backend preview hosts.

@@ -1,3 +1,4 @@
+import { env as privateEnv } from '$env/dynamic/private';
 import { createAnchor, listAnchors } from '$lib/server/anchors-api';
 import { hasFieldErrors, parseAnchorForm } from '$lib/server/anchor-form';
 import { resolveApiBaseUrl } from '$lib/server/resolve-api-base-url';
@@ -8,7 +9,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 	const apiBaseUrl = resolveApiBaseUrl();
 
 	try {
-		const anchors = await listAnchors(fetch, apiBaseUrl);
+		const anchors = await listAnchors(fetch, apiBaseUrl, privateEnv.BACKEND_API_SHARED_SECRET);
 		return { anchors };
 	} catch {
 		throw error(502, 'Unable to load anchors from API');
@@ -31,7 +32,12 @@ export const actions: Actions = {
 		const apiBaseUrl = resolveApiBaseUrl();
 
 		try {
-			await createAnchor(fetch, apiBaseUrl, parsed.data);
+			await createAnchor(
+				fetch,
+				apiBaseUrl,
+				parsed.data,
+				privateEnv.BACKEND_API_SHARED_SECRET
+			);
 		} catch {
 			return fail(502, {
 				values: parsed.values,

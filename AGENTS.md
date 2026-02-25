@@ -76,6 +76,7 @@ Validation workflow note:
 
 - Root `.gitignore` came from a Python template and ignores `lib/`; keep the explicit unignore for `svelte-frontend/src/lib/**`.
 - Vercel aliases can be set (for example `love-where-you-live.vercel.app`), but project protection may still require auth until disabled in Vercel settings.
+- Backend API security policy: all public backend endpoints under `/api/v1` must be protected by the shared-secret mechanism (`x-backend-secret` validated against `API_SHARED_SECRET`) and constrained by explicit CORS allowlist values in `CORS_ALLOWED_ORIGINS`. Do not introduce new `/api/v1` routes without this protection.
 
 ## Tech Stack
 
