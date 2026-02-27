@@ -1,3 +1,5 @@
+import re
+
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -21,6 +23,36 @@ def parse_cors_allowed_origins(origins: str | list[str]) -> list[str]:
         split_origins = origins
 
     return [origin.strip().rstrip('/') for origin in split_origins if origin.strip()]
+
+
+def split_cors_allowed_origins(
+    origins: list[str],
+) -> tuple[list[str], list[str]]:
+    exact_origins: list[str] = []
+    wildcard_origins: list[str] = []
+
+    for origin in origins:
+        if '*' in origin:
+            wildcard_origins.append(origin)
+            continue
+
+        exact_origins.append(origin)
+
+    return exact_origins, wildcard_origins
+
+
+def compile_cors_allowed_origin_regex(wildcard_origins: list[str]) -> str | None:
+    if not wildcard_origins:
+        return None
+
+    wildcard_pattern = r'[A-Za-z0-9-]+'
+    compiled_patterns: list[str] = []
+
+    for wildcard_origin in wildcard_origins:
+        escaped_origin = re.escape(wildcard_origin)
+        compiled_patterns.append(escaped_origin.replace(r'\*', wildcard_pattern))
+
+    return f"^(?:{'|'.join(compiled_patterns)})$"
 
 
 class Settings(BaseSettings):
