@@ -6,6 +6,25 @@ function apiUrl(apiBaseUrl: string, path: string): string {
 	return `${apiBaseUrl.replace(/\/$/, '')}${path}`;
 }
 
+interface RequestHeaderOptions {
+	sharedSecret?: string;
+	vercelProtectionBypassSecret?: string;
+}
+
+function requestHeaders(options: RequestHeaderOptions = {}): HeadersInit {
+	const headers: Record<string, string> = {};
+
+	if (options.sharedSecret) {
+		headers['x-backend-secret'] = options.sharedSecret;
+	}
+
+	if (options.vercelProtectionBypassSecret) {
+		headers['x-vercel-protection-bypass'] = options.vercelProtectionBypassSecret;
+	}
+
+	return headers;
+}
+
 export class AnchorApiError extends Error {
 	status: number;
 	responseBody: string;
@@ -26,8 +45,15 @@ async function responseBody(response: Response): Promise<string> {
 	}
 }
 
-export async function listAnchors(fetchFn: ApiFetch, apiBaseUrl: string): Promise<AnchorRead[]> {
-	const response = await fetchFn(apiUrl(apiBaseUrl, '/api/v1/anchors'));
+export async function listAnchors(
+	fetchFn: ApiFetch,
+	apiBaseUrl: string,
+	sharedSecret?: string,
+	vercelProtectionBypassSecret?: string
+): Promise<AnchorRead[]> {
+	const response = await fetchFn(apiUrl(apiBaseUrl, '/api/v1/anchors'), {
+		headers: requestHeaders({ sharedSecret, vercelProtectionBypassSecret })
+	});
 
 	if (!response.ok) {
 		throw new AnchorApiError('Failed to list anchors', response.status, await responseBody(response));
@@ -39,11 +65,16 @@ export async function listAnchors(fetchFn: ApiFetch, apiBaseUrl: string): Promis
 export async function createAnchor(
 	fetchFn: ApiFetch,
 	apiBaseUrl: string,
-	payload: AnchorCreateInput
+	payload: AnchorCreateInput,
+	sharedSecret?: string,
+	vercelProtectionBypassSecret?: string
 ): Promise<AnchorRead> {
 	const response = await fetchFn(apiUrl(apiBaseUrl, '/api/v1/anchors'), {
 		method: 'POST',
-		headers: { 'content-type': 'application/json' },
+		headers: {
+			'content-type': 'application/json',
+			...requestHeaders({ sharedSecret, vercelProtectionBypassSecret })
+		},
 		body: JSON.stringify(payload)
 	});
 
