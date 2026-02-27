@@ -60,7 +60,7 @@
 				Find your rhythm.
 			</h1>
 			<p class="text-balance mx-auto max-w-xl text-lg leading-relaxed text-muted">
-				Add the places that matter most, then compare every home against the life you already live.
+				Add the places that matter most, then compare every potential home against the life you already live.
 			</p>
 		</div>
 
