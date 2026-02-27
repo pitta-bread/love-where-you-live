@@ -11,7 +11,11 @@ export const load: PageServerLoad = async ({ fetch }) => {
 	try {
 		const anchors = await listAnchors(fetch, apiBaseUrl, privateEnv.BACKEND_API_SHARED_SECRET);
 		return { anchors };
-	} catch {
+	} catch (cause) {
+		console.error('Failed to load anchors from backend API', {
+			apiBaseUrl,
+			cause
+		});
 		throw error(502, 'Unable to load anchors from API');
 	}
 };
