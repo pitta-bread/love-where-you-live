@@ -6,12 +6,23 @@ function apiUrl(apiBaseUrl: string, path: string): string {
 	return `${apiBaseUrl.replace(/\/$/, '')}${path}`;
 }
 
-function requestHeaders(sharedSecret?: string): HeadersInit {
-	if (!sharedSecret) {
-		return {};
+interface RequestHeaderOptions {
+	sharedSecret?: string;
+	vercelProtectionBypassSecret?: string;
+}
+
+function requestHeaders(options: RequestHeaderOptions = {}): HeadersInit {
+	const headers: Record<string, string> = {};
+
+	if (options.sharedSecret) {
+		headers['x-backend-secret'] = options.sharedSecret;
 	}
 
-	return { 'x-backend-secret': sharedSecret };
+	if (options.vercelProtectionBypassSecret) {
+		headers['x-vercel-protection-bypass'] = options.vercelProtectionBypassSecret;
+	}
+
+	return headers;
 }
 
 export class AnchorApiError extends Error {
@@ -37,10 +48,11 @@ async function responseBody(response: Response): Promise<string> {
 export async function listAnchors(
 	fetchFn: ApiFetch,
 	apiBaseUrl: string,
-	sharedSecret?: string
+	sharedSecret?: string,
+	vercelProtectionBypassSecret?: string
 ): Promise<AnchorRead[]> {
 	const response = await fetchFn(apiUrl(apiBaseUrl, '/api/v1/anchors'), {
-		headers: requestHeaders(sharedSecret)
+		headers: requestHeaders({ sharedSecret, vercelProtectionBypassSecret })
 	});
 
 	if (!response.ok) {
@@ -54,13 +66,14 @@ export async function createAnchor(
 	fetchFn: ApiFetch,
 	apiBaseUrl: string,
 	payload: AnchorCreateInput,
-	sharedSecret?: string
+	sharedSecret?: string,
+	vercelProtectionBypassSecret?: string
 ): Promise<AnchorRead> {
 	const response = await fetchFn(apiUrl(apiBaseUrl, '/api/v1/anchors'), {
 		method: 'POST',
 		headers: {
 			'content-type': 'application/json',
-			...requestHeaders(sharedSecret)
+			...requestHeaders({ sharedSecret, vercelProtectionBypassSecret })
 		},
 		body: JSON.stringify(payload)
 	});
