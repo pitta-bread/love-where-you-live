@@ -7,6 +7,10 @@ describe('/+page.svelte', () => {
 		const { body } = render(Page, {
 			props: {
 				data: {
+					user: {
+						sub: 'google-user-123',
+						email: 'test.user@example.com'
+					},
 					anchors: [
 						{
 							id: 1,
@@ -25,6 +29,8 @@ describe('/+page.svelte', () => {
 		});
 
 		expect(body).toContain('Love Where You Live');
+		expect(body).toContain('test.user@example.com');
+		expect(body).toContain('Sign out');
 		expect(body).toContain('124 Maple Close');
 		expect(body).toContain('Your anchors');
 		expect(body).toContain('Temple Quay Office');

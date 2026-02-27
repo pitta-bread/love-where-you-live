@@ -31,7 +31,19 @@
 	<header class="border-b border-border bg-background/90">
 		<div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
 			<h1 class="text-2xl font-semibold text-primary">Love Where You Live</h1>
-			<p class="text-sm font-bold uppercase tracking-wide text-muted">Phase 0 Static Screen</p>
+			{#if data.user}
+				<div class="flex items-center gap-3">
+					<p class="max-w-56 truncate text-sm font-bold text-muted sm:max-w-none">{data.user.email}</p>
+					<form method="POST" action="/logout">
+						<button
+							type="submit"
+							class="rounded-sm border border-border bg-surface px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-primary transition hover:border-accent hover:text-accent"
+						>
+							Sign out
+						</button>
+					</form>
+				</div>
+			{/if}
 		</div>
 	</header>
 

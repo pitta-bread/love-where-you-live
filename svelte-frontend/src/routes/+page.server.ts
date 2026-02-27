@@ -5,7 +5,17 @@ import { resolveApiBaseUrl } from '$lib/server/resolve-api-base-url';
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ fetch }) => {
+function requireAuthenticatedUser(locals: App.Locals): NonNullable<App.Locals['user']> {
+	if (!locals.user) {
+		throw redirect(303, '/welcome');
+	}
+
+	return locals.user;
+}
+
+export const load: PageServerLoad = async ({ fetch, locals }) => {
+	requireAuthenticatedUser(locals);
+
 	const apiBaseUrl = resolveApiBaseUrl();
 
 	try {
@@ -26,7 +36,9 @@ export const load: PageServerLoad = async ({ fetch }) => {
 };
 
 export const actions: Actions = {
-	create: async ({ request, fetch }) => {
+	create: async ({ request, fetch, locals }) => {
+		requireAuthenticatedUser(locals);
+
 		const formData = await request.formData();
 		const parsed = parseAnchorForm(formData);
 
