@@ -13,12 +13,14 @@ describe('anchors-api shared secret header', () => {
 		await listAnchors(
 			fetchFn as typeof fetch,
 			'https://api.example.com',
+			'user@example.com',
 			'top-secret',
 			'bypass-secret'
 		);
 
 		expect(fetchFn).toHaveBeenCalledWith('https://api.example.com/api/v1/anchors', {
 			headers: {
+				'x-user-email': 'user@example.com',
 				'x-backend-secret': 'top-secret',
 				'x-vercel-protection-bypass': 'bypass-secret'
 			}
@@ -43,6 +45,7 @@ describe('anchors-api shared secret header', () => {
 				frequency_per_week: 3,
 				importance_weight: 4
 			},
+			'user@example.com',
 			'top-secret',
 			'bypass-secret'
 		);
@@ -51,6 +54,7 @@ describe('anchors-api shared secret header', () => {
 			method: 'POST',
 			headers: {
 				'content-type': 'application/json',
+				'x-user-email': 'user@example.com',
 				'x-backend-secret': 'top-secret',
 				'x-vercel-protection-bypass': 'bypass-secret'
 			},

@@ -21,6 +21,7 @@ class AnchorBase(SQLModel):
 
 class Anchor(AnchorBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
+    user_email: str = Field(min_length=3, max_length=320, index=True)
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
         sa_type=DateTime(timezone=True),
