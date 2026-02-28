@@ -14,7 +14,7 @@ function requireAuthenticatedUser(locals: App.Locals): NonNullable<App.Locals['u
 }
 
 export const load: PageServerLoad = async ({ fetch, locals }) => {
-	requireAuthenticatedUser(locals);
+	const user = requireAuthenticatedUser(locals);
 
 	const apiBaseUrl = resolveApiBaseUrl();
 
@@ -22,6 +22,7 @@ export const load: PageServerLoad = async ({ fetch, locals }) => {
 		const anchors = await listAnchors(
 			fetch,
 			apiBaseUrl,
+			user.email,
 			privateEnv.BACKEND_API_SHARED_SECRET,
 			privateEnv.BACKEND_VERCEL_PROTECTION_BYPASS_SECRET
 		);
@@ -37,7 +38,7 @@ export const load: PageServerLoad = async ({ fetch, locals }) => {
 
 export const actions: Actions = {
 	create: async ({ request, fetch, locals }) => {
-		requireAuthenticatedUser(locals);
+		const user = requireAuthenticatedUser(locals);
 
 		const formData = await request.formData();
 		const parsed = parseAnchorForm(formData);
@@ -57,6 +58,7 @@ export const actions: Actions = {
 				fetch,
 				apiBaseUrl,
 				parsed.data,
+				user.email,
 				privateEnv.BACKEND_API_SHARED_SECRET,
 				privateEnv.BACKEND_VERCEL_PROTECTION_BYPASS_SECRET
 			);

@@ -7,6 +7,7 @@ function apiUrl(apiBaseUrl: string, path: string): string {
 }
 
 interface RequestHeaderOptions {
+	userEmail?: string;
 	sharedSecret?: string;
 	vercelProtectionBypassSecret?: string;
 }
@@ -16,6 +17,10 @@ function requestHeaders(options: RequestHeaderOptions = {}): HeadersInit {
 
 	if (options.sharedSecret) {
 		headers['x-backend-secret'] = options.sharedSecret;
+	}
+
+	if (options.userEmail) {
+		headers['x-user-email'] = options.userEmail;
 	}
 
 	if (options.vercelProtectionBypassSecret) {
@@ -48,11 +53,12 @@ async function responseBody(response: Response): Promise<string> {
 export async function listAnchors(
 	fetchFn: ApiFetch,
 	apiBaseUrl: string,
+	userEmail: string,
 	sharedSecret?: string,
 	vercelProtectionBypassSecret?: string
 ): Promise<AnchorRead[]> {
 	const response = await fetchFn(apiUrl(apiBaseUrl, '/api/v1/anchors'), {
-		headers: requestHeaders({ sharedSecret, vercelProtectionBypassSecret })
+		headers: requestHeaders({ userEmail, sharedSecret, vercelProtectionBypassSecret })
 	});
 
 	if (!response.ok) {
@@ -66,6 +72,7 @@ export async function createAnchor(
 	fetchFn: ApiFetch,
 	apiBaseUrl: string,
 	payload: AnchorCreateInput,
+	userEmail: string,
 	sharedSecret?: string,
 	vercelProtectionBypassSecret?: string
 ): Promise<AnchorRead> {
@@ -73,7 +80,7 @@ export async function createAnchor(
 		method: 'POST',
 		headers: {
 			'content-type': 'application/json',
-			...requestHeaders({ sharedSecret, vercelProtectionBypassSecret })
+			...requestHeaders({ userEmail, sharedSecret, vercelProtectionBypassSecret })
 		},
 		body: JSON.stringify(payload)
 	});
