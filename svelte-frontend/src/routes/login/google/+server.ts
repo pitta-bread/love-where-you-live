@@ -13,7 +13,7 @@ import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = ({ cookies, locals, url }) => {
 	if (locals.user) {
-		throw redirect(303, '/');
+		throw redirect(303, '/projects');
 	}
 
 	const state = generateGoogleOauthState();
