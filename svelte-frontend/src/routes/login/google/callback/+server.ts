@@ -49,5 +49,5 @@ export const GET: RequestHandler = async ({ cookies, url }) => {
 	const sessionToken = createSessionToken(identity);
 	cookies.set(AUTH_SESSION_COOKIE_NAME, sessionToken, authSessionCookieOptions(url));
 
-	throw redirect(303, '/');
+	throw redirect(303, '/projects');
 };

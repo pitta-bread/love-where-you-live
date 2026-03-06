@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Love Where You Live - Your Moves</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&amp;family=Lato:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#2F3E46",
+              "background": "#F5F2EA",
+              "surface": "#FFFFFF",
+              "surface-muted": "#EAE4D6",
+              "accent": "#C18A63",
+              "success": "#7E9C76",
+              "warning": "#D4A373",
+              "error": "#BC6C25",
+              "slate-charcoal": "#2F3E46",
+              "background-light": "#f6f7f8",
+              "background-dark": "#111b21",
+            },
+            fontFamily: {
+              "serif": ["'Playfair Display'", "serif"],
+              "sans": ["Lato", "sans-serif"],
+              "display": ["Newsreader", "serif"],
+            },
+            borderRadius: {
+              "sm": "2px",
+              "md": "4px",
+              "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"
+            },
+            backgroundImage: {
+                'paper-texture': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjRjVGMkVBIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMwMDAiIG9wYWNpdHk9IjAuMDIiLz4KPC9zdmc+')",
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .text-balance {
+            text-wrap: balance;
+        }
+        .hand-drawn-arrow {
+            stroke-dasharray: 400;
+            stroke-dashoffset: 400;
+            animation: draw 1.5s ease-out forwards 0.5s;
+        }
+        @keyframes draw {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-slate-charcoal antialiased min-h-screen flex flex-col font-sans selection:bg-accent/20">
+<div class="fixed inset-0 pointer-events-none z-50 mix-blend-multiply opacity-[0.02] bg-paper-texture"></div>
+<nav class="w-full px-6 py-6 md:px-12 flex justify-between items-center z-10 border-b border-slate-charcoal/5">
+<div class="flex items-center gap-3 cursor-pointer">
+<span class="material-symbols-outlined text-accent text-3xl">home</span>
+<span class="text-xl font-serif font-semibold tracking-tight text-slate-charcoal hidden sm:inline-block">Love Where You Live</span>
+</div>
+<div class="flex items-center gap-6">
+<span class="text-slate-charcoal/70 font-sans text-sm hidden sm:block">alex.morgan@example.com</span>
+<button class="text-slate-charcoal hover:text-accent font-sans text-sm font-semibold tracking-wide transition-colors">
+                Log out
+            </button>
+</div>
+</nav>
+<main class="flex-1 flex flex-col items-center justify-center px-6 pb-20 z-10 w-full max-w-7xl mx-auto">
+<div class="w-full max-w-[600px] flex flex-col items-center text-center mt-8">
+<div class="mb-10 p-8 rounded-full bg-surface-muted/30 border border-surface-muted">
+<span class="material-symbols-outlined text-slate-charcoal/40 text-[64px] font-light">maps_home_work</span>
+</div>
+<div class="space-y-4 mb-10">
+<h1 class="text-[42px] font-serif font-semibold text-slate-charcoal leading-tight text-balance">
+                    Your Moves
+                </h1>
+<p class="text-[18px] text-[#5A6A72] font-sans leading-relaxed max-w-[500px] mx-auto text-balance">
+                    Think of 'Moves' like folders for your property search. Organise different searches, compare locations, and measure them against your life's anchors.
+                </p>
+</div>
+<div class="flex flex-col items-center gap-8 relative">
+<button class="group flex items-center gap-3 bg-slate-charcoal hover:bg-[#3d4f58] text-white font-sans font-bold text-[14px] tracking-[0.05em] uppercase px-8 py-4 rounded-[2px] transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-0.5">
+<span class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform duration-300">add</span>
+                    Create New Move
+                </button>
+<div class="absolute top-full left-1/2 -translate-x-12 translate-y-4 flex flex-col items-center">
+<svg class="w-16 h-16 text-accent transform -rotate-12" fill="none" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<path class="hand-drawn-arrow" d="M60 80 C 60 50, 40 40, 30 15 M 30 15 L 15 30 M 30 15 L 45 25" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="font-serif italic text-accent text-lg text-center w-40 -mt-2 leading-tight">
+                        Start by creating your first project here
+                    </span>
+</div>
+</div>
+</div>
+</main>
+</body></html>
